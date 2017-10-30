@@ -11,14 +11,12 @@ import com.example.alin_.customviewht.Contact;
 import com.example.alin_.customviewht.contacts.ContactsActivity;
 import com.example.alin_.customviewht.R;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private List<Contact> contacts;
     private LinearLayout rootView;
 
@@ -28,19 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         contacts = new ArrayList<>();
         rootView = findViewById(R.id.ll_main);
-        EventBus.getDefault().register(this);
-    }
-
-    @Subscribe
-    public void onNameEnteredEvent(EnterNameEvent event){
-        contacts.add(new Contact(event.getEnteredName()));
-        rootView.addView(event.getView());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+        ContactView contactView = new ContactView(this,rootView);
+        rootView.addView(contactView);
     }
 
     @Override
@@ -54,10 +41,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_save:
-                startActivity(ContactsActivity.newIntent(this,(ArrayList<Contact>) contacts));
+                startActivity(ContactsActivity.newIntent(this,(ArrayList<Contact>) getNames()));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private List<Contact> getNames(){
+        contacts.clear();
+        for (String name: ContactView.getNames()){
+            contacts.add(new Contact(name));
+        }
+        return contacts;
+    }
+
 }

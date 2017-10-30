@@ -8,8 +8,6 @@
     android:orientation="vertical"
     tools:context="com.example.alin_.customviewht.enter.MainActivity">
 
-    <com.example.alin_.customviewht.enter.ContactView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>
